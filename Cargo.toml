@@ -12,3 +12,6 @@ tokio = { version = "0.2", features = ["macros"] }
 warp = "0.2"
 tokio-postgres = "0.5.4"
 dotenv = "0.15.0"
+log = "0.4.8"
+pretty_env_logger = "0.4.0"
+chrono = "0.4.11"
