@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12.3
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: kyokdy
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+  adminer:
+    image: donnex/pgweb
+    command: "-s --bind=0.0.0.0 --listen=8080 --url postgresql://root:root@db/kyokdy?sslmode=disable"
+    links:
+      - db:db
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
