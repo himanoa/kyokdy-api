@@ -3,7 +3,7 @@ setup:
 	mkdir -p db_data
 	docker-compose up -d
 	docker pull izumin5210/ridgepole 
-	docker run --net=kyokdy-api_default --env-file migration.env izumin5210/ridgepole --apply
+	docker run --net=kyokdy-api_default --env-file migration.env -v $(PWD):/workdir izumin5210/ridgepole -c $$DB_URL --apply -f Schemafile -o Schemafile
 
 .PHONY: run
 run:
