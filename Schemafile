@@ -1,0 +1,4 @@
+create_table "users", force: :cascade do |t|
+  t.bigint "id", null: false
+  t.string "uid", null: false
+end
