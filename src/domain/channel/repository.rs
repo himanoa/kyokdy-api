@@ -5,7 +5,7 @@ use crate::exception::DataBaseError;
 
 #[async_trait]
 pub trait ChannelRepository {
-    async fn find_by_id(id: &str) -> Result<Channel, DataBaseError>;
-    async fn search_by_title(title: &str) -> Result<Channel, DataBaseError>;
-    async fn create(channel: Channel) -> Result<(), DataBaseError>;
+    async fn find_by_id(&self, id: &str) -> Result<Option<Channel>, DataBaseError>;
+    async fn search_by_title(&self, title: &str) -> Result<Vec<Channel>, DataBaseError>;
+    async fn create(&self, channel: Channel) -> Result<(), DataBaseError>;
 }
