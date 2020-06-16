@@ -1,6 +1,7 @@
 .PHONY: setup
 setup:
 	mkdir -p db_data
+	rm -f docker-compose.env
 	touch docker-compose.env
 	$(eval UID := $(shell id -u $(USER)))
 	$(eval GID := $(shell id -g $(USER)))
