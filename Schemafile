@@ -31,6 +31,5 @@ create_table "songs", force: :cascade do |t|
 end
 
 
-add_foreign_key "videos",  "channels", name: "fk_videos_channels"
-add_foreign_key "songs",  "videos", name: "fk_songs_videos"
-add_foreign_key "songs",  "users", name: "fk_songs_users"
+add_foreign_key "videos", "channels", primary_key: "channel_id", name: "fk_videos_channels"
+add_foreign_key "songs", "users", name: "fk_songs_users"
