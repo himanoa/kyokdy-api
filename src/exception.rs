@@ -1,10 +1,10 @@
-use thiserror::Error;
 use anyhow::Error as AnyHowError;
+use thiserror::Error;
 
 #[derive(Error, Debug, Eq, PartialEq)]
 #[error("{url:?} is invalid url")]
 pub struct UrlParseFailed {
-    url: String
+    url: String,
 }
 
 impl UrlParseFailed {

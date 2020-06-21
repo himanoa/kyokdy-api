@@ -1,7 +1,6 @@
-use async_trait::async_trait;
 use crate::domain::channel::model::Channel;
 use crate::exception::DataBaseError;
-
+use async_trait::async_trait;
 
 #[async_trait]
 pub trait ChannelRepository {

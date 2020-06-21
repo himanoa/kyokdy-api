@@ -1,7 +1,7 @@
-use url::{Url as CrateUrl};
 use crate::exception::UrlParseFailed;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
+use url::Url as CrateUrl;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct Url(pub String);
@@ -29,18 +29,30 @@ mod tests {
     use super::*;
     #[test]
     fn from_string_and_valid_url() {
-        assert_eq!(Url::try_from("https://google.com".to_string()).unwrap(), Url("https://google.com".to_string()));
+        assert_eq!(
+            Url::try_from("https://google.com".to_string()).unwrap(),
+            Url("https://google.com".to_string())
+        );
     }
     #[test]
     fn from_string_and_invalid_url() {
-        assert_eq!(Url::try_from("invalid_url".to_string()).err().unwrap(), UrlParseFailed::new("invalid_url".to_string()));
+        assert_eq!(
+            Url::try_from("invalid_url".to_string()).err().unwrap(),
+            UrlParseFailed::new("invalid_url".to_string())
+        );
     }
     #[test]
     fn from_str_and_valid_url() {
-        assert_eq!(Url::try_from("https://google.com").unwrap(), Url("https://google.com".to_string()));
+        assert_eq!(
+            Url::try_from("https://google.com").unwrap(),
+            Url("https://google.com".to_string())
+        );
     }
     #[test]
     fn from_str_and_invalid_url() {
-        assert_eq!(Url::try_from("invalid_url").err().unwrap(), UrlParseFailed::new("invalid_url".to_string()));
+        assert_eq!(
+            Url::try_from("invalid_url").err().unwrap(),
+            UrlParseFailed::new("invalid_url".to_string())
+        );
     }
 }

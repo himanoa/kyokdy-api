@@ -1,8 +1,8 @@
 pub mod domain;
-pub mod infra;
 pub mod exception;
-pub mod routes;
 pub mod handlers;
+pub mod infra;
+pub mod routes;
 
 pub struct Config<'a> {
     pub db_url: &'a str,
