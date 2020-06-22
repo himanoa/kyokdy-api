@@ -21,10 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let listen_address: SocketAddr = envs
         .get("LISTEN_ADDRESS")
-        .unwrap_or_else(|| {
-            error!("Environment variable `LISTEN_ADDRESS` must be set!");
-            exit(1);
-        })
+        .map_or("127.0.0.1:3000".to_string(), |address| address.to_string())
         .parse()
         .unwrap_or_else(|e| {
             error!("Failed to parse `LISTEN_ADDRESS`: {}", e);
@@ -46,6 +43,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     });
 
     serve(routes(Arc::new(pg_client))).run(listen_address).await;
-    println!("Hello, world!");
     Ok(())
 }
