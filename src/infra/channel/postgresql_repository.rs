@@ -27,19 +27,6 @@ impl TryFrom<&Row> for Channel {
     }
 }
 
-impl TryFrom<Row> for Channel {
-    type Error = Error;
-    fn try_from(value: Row) -> Result<Self> {
-        let icon_url: String = value.try_get("icon_url")?;
-
-        Ok(Channel {
-            id: value.try_get("id")?,
-            channel_id: value.try_get("channel_id")?,
-            name: value.try_get("name")?,
-            icon_url: Url::try_from(icon_url)?
-        })
-    }
-}
 
 impl PostgreSQLChannelRepository {
     pub fn new(client: Client) -> Self {
@@ -54,7 +41,7 @@ impl ChannelRepository for PostgreSQLChannelRepository {
 
         match result.is_empty() {
             true => Ok(None),
-            false => Channel::try_from(result).map_or(Ok(None), |channel| Ok(Some(channel)))
+            false => Channel::try_from(&result).map_or(Ok(None), |channel| Ok(Some(channel)))
         }
     }
     async fn search_by_name(&self, title: &str) -> Result<Vec<Channel>> {
