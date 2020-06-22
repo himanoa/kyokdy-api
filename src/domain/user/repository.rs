@@ -3,7 +3,10 @@ use async_trait::async_trait;
 use anyhow::Result;
 
 #[async_trait]
-pub trait UserRepository {
+pub trait UserRepository
+where
+    Self: Sized + Clone + Send + Sync
+{
     async fn create(&self, user: User) -> Result<()>;
     async fn find_by_uuid(&self, uuid: &str) -> Result<Option<User>>;
 }

@@ -1,17 +1,17 @@
 use crate::handlers::create_channel_handler;
-use crate::Application;
+use crate::IApplication;
 use std::sync::Arc;
 use tokio_postgres::Client;
 use warp::{Filter, Rejection, Reply};
 
-pub fn routes(client: Arc<Client>) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
-    create_channel(client.clone())
+pub fn routes(application: impl IApplication + 'static) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+    create_channel(application)
 }
 
 fn create_channel(
-    client: Arc<Client>,
+    application: impl IApplication + 'static
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
     warp::path!("channel")
         .and(warp::post())
-        .and_then(move || create_channel_handler(client.clone()))
+        .and_then(move || create_channel_handler(application.clone()))
 }

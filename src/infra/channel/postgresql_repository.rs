@@ -1,4 +1,5 @@
 use std::convert::TryFrom;
+use std::sync::Arc;
 
 use tokio_postgres::{Client, Row};
 use async_trait::async_trait;
@@ -9,12 +10,14 @@ use crate::domain::channel::model::{Channel, DraftChannel};
 use crate::domain::url::Url;
 
 
+#[derive(Clone)]
 pub struct PostgreSQLChannelRepository {
-    client: Client
+    client: Arc<Client>
 }
 
 impl TryFrom<&Row> for Channel {
     type Error = Error;
+
     fn try_from(value: &Row) -> Result<Self> {
         let icon_url: String = value.try_get("icon_url")?;
 
@@ -29,13 +32,14 @@ impl TryFrom<&Row> for Channel {
 
 
 impl PostgreSQLChannelRepository {
-    pub fn new(client: Client) -> Self {
+    pub fn new(client: Arc<Client>) -> Self {
         PostgreSQLChannelRepository { client }
     }
 }
 
 #[async_trait]
 impl ChannelRepository for PostgreSQLChannelRepository {
+
     async fn find_by_id(&self, id: &str) -> Result<Option<Channel>> {
         let result = self.client.query_one(r#"SELECT * FROM channels WHERE channel_id=$1;"#, &[&id]).await?;
 
@@ -44,6 +48,7 @@ impl ChannelRepository for PostgreSQLChannelRepository {
             false => Channel::try_from(&result).map_or(Ok(None), |channel| Ok(Some(channel)))
         }
     }
+
     async fn search_by_name(&self, title: &str) -> Result<Vec<Channel>> {
         let rows = self.client.query(r#"SELECT * FROM channels WHERE name LIKE '%$1%';"#, &[&title]).await?;
         rows.iter().try_fold(vec![], |mut channels, row| {
@@ -53,6 +58,7 @@ impl ChannelRepository for PostgreSQLChannelRepository {
             Ok(channels)
         })
     }
+
     async fn create(&self, channel: DraftChannel) -> Result<()> {
         let result = self.client.execute(r#"INSERT INTO channels(channel_id, name, icon_url) VALUES ($1, $2, $3);"#, &[&channel.channel_id, &channel.name, &channel.icon_url.0]).await?;
         match result {

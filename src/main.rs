@@ -4,8 +4,9 @@ use pretty_env_logger;
 use tokio::spawn;
 use tokio_postgres::NoTls;
 use warp::serve;
+use kyokdy_api::application::Application;
 
-use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit, sync::Arc};
+use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit};
 
 use kyokdy_api::routes::routes;
 #[tokio::main]
@@ -42,6 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     });
 
-    serve(routes(Arc::new(pg_client))).run(listen_address).await;
+    let application = Application::new(pg_client);
+    serve(routes(application)).run(listen_address).await;
     Ok(())
 }

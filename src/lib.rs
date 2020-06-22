@@ -4,6 +4,7 @@ pub mod handlers;
 pub mod infra;
 pub mod routes;
 pub mod initializer;
+pub mod application;
 
 use std::sync::Arc;
 
@@ -11,8 +12,12 @@ pub struct Config<'a> {
     pub db_url: &'a str,
 }
 
-#[derive(Clone)]
-pub struct Application {
-    pub channel_repository: Arc<dyn domain::channel::repository::ChannelRepository>,
+pub trait IApplication
+where
+    Self: Sized + Clone + Send + Sync,
+{
+    type ChannelRepository: domain::channel::repository::ChannelRepository;
+
+    fn channel_repository(&self) -> Self::ChannelRepository;
 }
 
