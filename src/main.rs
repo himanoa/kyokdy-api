@@ -1,10 +1,10 @@
 use dotenv::dotenv;
+use kyokdy_api::application::Application;
 use log::{error, info};
 use pretty_env_logger;
 use tokio::spawn;
 use tokio_postgres::NoTls;
 use warp::serve;
-use kyokdy_api::application::Application;
 
 use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit};
 

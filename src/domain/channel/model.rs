@@ -9,7 +9,6 @@ pub struct Channel {
     pub icon_url: Url,
 }
 
-
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct DraftChannel {
     pub channel_id: String,

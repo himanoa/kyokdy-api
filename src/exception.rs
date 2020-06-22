@@ -1,5 +1,5 @@
-use thiserror::Error;
 use std::convert::From;
+use thiserror::Error;
 
 #[derive(Error, Debug, Eq, PartialEq)]
 #[error("{url:?} is invalid url")]

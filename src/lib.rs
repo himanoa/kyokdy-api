@@ -1,10 +1,10 @@
+pub mod application;
 pub mod domain;
 pub mod exception;
 pub mod handlers;
 pub mod infra;
-pub mod routes;
 pub mod initializer;
-pub mod application;
+pub mod routes;
 
 use std::sync::Arc;
 
@@ -20,4 +20,3 @@ where
 
     fn channel_repository(&self) -> Self::ChannelRepository;
 }
-
