@@ -12,3 +12,8 @@ impl UrlParseFailed {
         UrlParseFailed { url }
     }
 }
+
+#[derive(Debug)]
+pub struct WarpError(pub anyhow::Error);
+
+impl warp::reject::Reject for WarpError {}

@@ -1,12 +1,21 @@
 use crate::domain::channel::model::DraftChannel;
 use crate::handlers::create_channel_handler;
 use crate::IApplication;
-use warp::{Filter, Rejection, Reply};
+use log::error;
+use serde::Serialize;
+use warp::{http::StatusCode, reply, Filter, Rejection, Reply};
+use std::convert::Infallible;
+
+#[derive(Serialize)]
+struct ErrorMessage {
+    description: String,
+}
 
 pub fn routes(
     application: impl IApplication + 'static,
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
     create_channel(application)
+        .recover(|e| handle_error(e))
 }
 
 fn create_channel(
@@ -15,7 +24,22 @@ fn create_channel(
     warp::path!("channel")
         .and(warp::post())
         .and(warp::body::json())
-        .and_then(move |body| {
-            create_channel_handler(application.clone(), body)
-        })
+        .and_then(move |body| create_channel_handler(application.clone(), body))
+}
+
+async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
+    let code;
+    let error_message = if e.is_not_found() {
+        code = StatusCode::NOT_FOUND;
+        ErrorMessage {
+            description: "Not found endpoint".to_string(),
+        }
+    } else {
+        code = StatusCode::INTERNAL_SERVER_ERROR;
+        error!("Internal server error {:?}", e);
+        ErrorMessage {
+            description: "Internal server error".to_string(),
+        }
+    };
+    Ok(warp::reply::with_status(reply::json(&error_message), code))
 }

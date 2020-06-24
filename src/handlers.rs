@@ -1,18 +1,21 @@
 use crate::domain::channel::model::DraftChannel;
 use crate::domain::channel::repository::ChannelRepository;
+use crate::exception::*;
 use crate::IApplication;
-use std::sync::Arc;
-use tokio_postgres::Client;
-use warp::{Rejection, Reply};
+use warp::{http, reject, reply, Rejection, Reply};
 
 pub async fn create_channel_handler(
     application: impl IApplication + 'static,
     draft_channel: DraftChannel,
 ) -> Result<impl Reply, Rejection> {
-    application.channel_repository().create(draft_channel).await?;
+    application
+        .channel_repository()
+        .create(draft_channel)
+        .await
+        .map_err(|e: anyhow::Error| reject::custom(WarpError(e)))?;
 
-    Ok(warp::reply::with_status(
-        warp::reply::json(&()),
-        warp::http::StatusCode::CREATED,
+    Ok(reply::with_status(
+        reply::json(&()),
+        http::StatusCode::CREATED,
     ))
 }
