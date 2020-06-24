@@ -4,7 +4,9 @@ use crate::IApplication;
 use log::error;
 use serde::Serialize;
 use std::convert::Infallible;
-use warp::{http::StatusCode, reply, Filter, Rejection, Reply, filters::body::BodyDeserializeError};
+use warp::{
+    filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply,
+};
 
 #[derive(Serialize)]
 struct ErrorMessage {
@@ -36,10 +38,9 @@ async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
     } else if let Some(error) = e.find::<BodyDeserializeError>() {
         code = StatusCode::BAD_REQUEST;
         ErrorMessage {
-            description: error.to_string()
+            description: error.to_string(),
         }
-    }
-    else {
+    } else {
         code = StatusCode::INTERNAL_SERVER_ERROR;
         error!("Internal server error {:?}", e);
         ErrorMessage {
