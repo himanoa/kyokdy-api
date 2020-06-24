@@ -3,8 +3,8 @@ use crate::handlers::create_channel_handler;
 use crate::IApplication;
 use log::error;
 use serde::Serialize;
-use warp::{http::StatusCode, reply, Filter, Rejection, Reply};
 use std::convert::Infallible;
+use warp::{http::StatusCode, reply, Filter, Rejection, Reply};
 
 #[derive(Serialize)]
 struct ErrorMessage {
@@ -14,8 +14,7 @@ struct ErrorMessage {
 pub fn routes(
     application: impl IApplication + 'static,
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
-    create_channel(application)
-        .recover(|e| handle_error(e))
+    create_channel(application).recover(|e| handle_error(e))
 }
 
 fn create_channel(
