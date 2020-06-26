@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  testing_db:
+    image: postgres:12.3
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: kyokdy_test
+    ports:
+      - 5433:5432
   db:
     image: postgres:12.3
     restart: always
@@ -23,3 +32,4 @@ services:
       - 8080:8080
     depends_on:
       - db
+      - testing_db
