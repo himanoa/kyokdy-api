@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Channel {
-    pub id: i32,
+    pub id: i64,
     pub channel_id: String,
     pub name: String,
     pub icon_url: Url,

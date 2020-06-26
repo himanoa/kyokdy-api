@@ -45,7 +45,7 @@ impl ChannelRepository for PostgreSQLChannelRepository {
 
         match result.is_empty() {
             true => Ok(None),
-            false => Channel::try_from(&result).map_or(Ok(None), |channel| Ok(Some(channel))),
+            false => Ok(Some(Channel::try_from(&result)?)),
         }
     }
 
@@ -77,5 +77,43 @@ impl ChannelRepository for PostgreSQLChannelRepository {
             0 => Err(anyhow!("Failed Insert row.data: {:?}", channel)),
             _ => Ok(()),
         }
+    }
+}
+
+
+#[cfg(test)]
+#[cfg_attr(not(feature = "integration_test"), cfg(ignore))]
+mod integration_test {
+    use super::*;
+    use dotenv::dotenv;
+    use tokio_postgres::{connect, Client, NoTls};
+    use tokio::spawn;
+    use std::{env::vars, collections::HashMap};
+
+    async fn teardown(client: Arc<Client>) {
+        client.execute(r#"DELETE FROM "channels";"#, &[]).await.expect("Failed clean up channels table");
+    }
+    #[tokio::test]
+    async fn create_add_row_and_find_by_id() {
+        dotenv().ok();
+        let envs: HashMap<_, _> = vars().collect();
+        let db_config = envs.get("TESTING_DATABASE_URL").expect("TESTING_DATABASE_URL must be set");
+
+        let (client, pg_connection) = connect(db_config, NoTls).await.unwrap();
+        let a_client = Arc::new(client);
+
+        spawn(async move {
+            pg_connection.await
+        });
+        let repository = PostgreSQLChannelRepository::new(a_client.clone());
+        let draft_channel = DraftChannel {
+            channel_id: "foo".to_string(),
+            name: "bar".to_string(),
+            icon_url: Url::try_from("https://example.com").unwrap()
+        };
+        repository.create(draft_channel).await.expect("Failed create draft channel");
+        let channel = repository.find_by_id("foo").await.expect("foo is not found in channels");
+        assert!(channel.is_some());
+        teardown(a_client).await;
     }
 }
