@@ -14,7 +14,6 @@ impl ChannelService  {
     pub async fn append_channel(&self, draft_channel : DraftChannel) -> Result<()> {
         self.
             channel_repository
-            .clone()
             .create(draft_channel).await
     }
 }
