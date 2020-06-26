@@ -50,11 +50,11 @@ impl ChannelRepository for PostgreSQLChannelRepository {
     }
 
     async fn search_by_name(&self, title: &str) -> Result<Vec<Channel>> {
+        let partial_searchable_query = format!("%{}%", title);
         let rows = self
             .client
             .query(
-                r#"SELECT * FROM channels WHERE name LIKE '%$1%';"#,
-                &[&title],
+                r#"SELECT * FROM channels WHERE name LIKE $1;"#, &[&partial_searchable_query],
             )
             .await?;
         rows.iter().try_fold(vec![], |mut channels, row| {
@@ -114,6 +114,32 @@ mod integration_test {
         repository.create(draft_channel).await.expect("Failed create draft channel");
         let channel = repository.find_by_id("foo").await.expect("foo is not found in channels");
         assert!(channel.is_some());
+        teardown(a_client).await;
+    }
+
+    #[tokio::test]
+    async fn search_by_name() {
+        dotenv().ok();
+        let envs: HashMap<_, _> = vars().collect();
+        let db_config = envs.get("TESTING_DATABASE_URL").expect("TESTING_DATABASE_URL must be set");
+
+        let (client, pg_connection) = connect(db_config, NoTls).await.unwrap();
+        let a_client = Arc::new(client);
+
+        spawn(async move {
+            pg_connection.await
+        });
+        let repository = PostgreSQLChannelRepository::new(a_client.clone());
+        let draft_channel = DraftChannel {
+            channel_id: "foo112".to_string(),
+            name: "bar".to_string(),
+            icon_url: Url::try_from("https://example.com").unwrap()
+        };
+        assert!(repository.search_by_name("bar").await.expect("Failed search_by_name").is_empty());
+        repository.create(draft_channel).await.expect("Failed create draft channel");
+        assert_ne!(repository.search_by_name("bar").await.expect("Failed search_by_name").is_empty(), true);
+        assert_ne!(repository.search_by_name("ba").await.expect("Failed search_by_name").is_empty(), true);
+        assert_ne!(repository.search_by_name("a").await.expect("Failed search_by_name").is_empty(), true);
         teardown(a_client).await;
     }
 }
