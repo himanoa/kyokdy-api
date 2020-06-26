@@ -12,7 +12,8 @@ pub struct Config<'a> {
     pub db_url: &'a str,
 }
 
-pub trait IApplication
-{
-    fn channel_repository(&self) -> Arc<dyn domain::channel::repository::ChannelRepository + Send + Sync>;
+pub trait IApplication {
+    fn channel_repository(
+        &self,
+    ) -> Arc<dyn domain::channel::repository::ChannelRepository + Send + Sync>;
 }

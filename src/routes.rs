@@ -21,8 +21,8 @@ pub fn routes(
 }
 
 fn create_channel(
-    application: Arc<dyn IApplication + Send + Sync> 
-) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone{
+    application: Arc<dyn IApplication + Send + Sync>,
+) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
     warp::path!("channel")
         .and(warp::post())
         .and(warp::body::json())
