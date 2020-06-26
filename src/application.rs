@@ -1,5 +1,5 @@
 use crate::infra::channel::postgresql_repository::PostgreSQLChannelRepository;
-use crate::{infra, IApplication};
+use crate::{infra, IApplication, domain};
 use std::sync::Arc;
 use tokio_postgres::Client;
 
@@ -9,9 +9,8 @@ pub struct Application {
 }
 
 impl IApplication for Application {
-    type ChannelRepository = infra::channel::postgresql_repository::PostgreSQLChannelRepository;
-    fn channel_repository(&self) -> Self::ChannelRepository {
-        PostgreSQLChannelRepository::new(self.client.clone())
+    fn channel_repository(&self) -> Arc<dyn domain::channel::repository::ChannelRepository + Send + Sync> {
+        Arc::new(PostgreSQLChannelRepository::new(self.client.clone()))
     }
 }
 

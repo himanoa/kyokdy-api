@@ -6,7 +6,7 @@ use tokio::spawn;
 use tokio_postgres::NoTls;
 use warp::serve;
 
-use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit};
+use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit, sync::Arc};
 
 use kyokdy_api::routes::routes;
 #[tokio::main]
@@ -43,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     });
 
-    let application = Application::new(pg_client);
+    let application = Arc::new(Application::new(pg_client));
     serve(routes(application)).run(listen_address).await;
     Ok(())
 }

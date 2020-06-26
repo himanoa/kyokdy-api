@@ -4,6 +4,7 @@ use crate::IApplication;
 use log::error;
 use serde::Serialize;
 use std::convert::Infallible;
+use std::sync::Arc;
 use warp::{
     filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply,
 };
@@ -14,14 +15,14 @@ struct ErrorMessage {
 }
 
 pub fn routes(
-    application: impl IApplication + 'static,
+    application: Arc<dyn IApplication + Send + Sync>,
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
     create_channel(application).recover(|e| handle_error(e))
 }
 
 fn create_channel(
-    application: impl IApplication + 'static,
-) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+    application: Arc<dyn IApplication + Send + Sync> 
+) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone{
     warp::path!("channel")
         .and(warp::post())
         .and(warp::body::json())

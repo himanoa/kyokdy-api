@@ -4,8 +4,10 @@ use crate::exception::*;
 use crate::IApplication;
 use warp::{http, reject, reply, Rejection, Reply};
 
+use std::sync::Arc;
+
 pub async fn create_channel_handler(
-    application: impl IApplication + 'static,
+    application: Arc<dyn IApplication + Send + Sync>,
     draft_channel: DraftChannel,
 ) -> Result<impl Reply, Rejection> {
     application
