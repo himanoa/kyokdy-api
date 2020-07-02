@@ -1,4 +1,4 @@
-use super::model::{Video, DraftVideo};
+use super::model::{DraftVideo, Video};
 use anyhow::Result;
 use async_trait::async_trait;
 

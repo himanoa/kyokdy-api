@@ -38,3 +38,7 @@ unit-test:
 .PHONY: integration-test
 integration-test:
 	cargo test --features integration_test
+
+.PHONY: fmt
+fmt:
+	cargo fmt

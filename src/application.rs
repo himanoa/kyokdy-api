@@ -15,7 +15,9 @@ impl IApplication for Application {
     ) -> Arc<dyn domain::channel::repository::ChannelRepository + Send + Sync> {
         Arc::new(PostgreSQLChannelRepository::new(self.client.clone()))
     }
-    fn video_repository(&self) -> Arc<dyn domain::video::repository::VideoRepository + Send + Sync> {
+    fn video_repository(
+        &self,
+    ) -> Arc<dyn domain::video::repository::VideoRepository + Send + Sync> {
         Arc::new(PostgreSQLVideoRepository::new(self.client.clone()))
     }
 }
