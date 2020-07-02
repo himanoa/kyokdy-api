@@ -3,8 +3,12 @@ use crate::domain::channel::repository::ChannelRepository;
 use crate::exception::*;
 use crate::IApplication;
 use warp::{http, reject, reply, Rejection, Reply};
-
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+
+
+#[derive(Serialize, Deserialize)]
+struct Empty {}
 
 pub async fn create_channel_handler(
     application: Arc<dyn IApplication + Send + Sync>,
@@ -17,7 +21,7 @@ pub async fn create_channel_handler(
         .map_err(|e: anyhow::Error| reject::custom(WarpError(e)))?;
 
     Ok(reply::with_status(
-        reply::json(&()),
+        reply::json(&Empty{}),
         http::StatusCode::CREATED,
     ))
 }
