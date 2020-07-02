@@ -26,3 +26,15 @@ db-dry-run:
 db-migrate:
 	docker run --net=kyokdy-api_default  -v $(PWD):/workdir izumin5210/ridgepole -c $(DB_URL) --apply -f Schemafile -o Schemafile 
 	docker run --net=kyokdy-api_default  -v $(PWD):/workdir izumin5210/ridgepole -c $(TESTING_DB_URL) --apply -f Schemafile -o Schemafile
+
+.PHONY: unit-test
+unit-test:
+	cargo test
+
+.PHONY: unit-test
+unit-test:
+	cargo test
+
+.PHONY: integration-test
+integration-test:
+	cargo test --features integration_test
