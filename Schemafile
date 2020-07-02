@@ -4,14 +4,14 @@ create_table "users", force: :cascade do |t|
   t.index "uid", unique: true
 end
 
-create_table "channels", force: :cascade do |t|
+create_table "channels", id: :string, force: :cascade do |t|
   t.string "channel_id", null: false
   t.string "name", null: false
   t.text "icon_url", null: false
   t.index "channel_id", unique: true
 end
 
-create_table "videos", force: :cascade do |t|
+create_table "videos", id: :string, force: :cascade do |t|
   t.string "youtube_video_id", null: false
   t.integer "channel_id", null: false
   t.string "title", null: false
