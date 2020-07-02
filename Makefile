@@ -22,3 +22,7 @@ run:
 db-dry-run:
 	docker run --net=kyokdy-api_default -v $(PWD):/workdir izumin5210/ridgepole -c $(DB_URL) --apply --dry-run -f Schemafile -o Schemafile
 
+.PHONY: db-migrate
+db-migrate:
+	docker run --net=kyokdy-api_default  -v $(PWD):/workdir izumin5210/ridgepole -c $(DB_URL) --apply -f Schemafile -o Schemafile 
+	docker run --net=kyokdy-api_default  -v $(PWD):/workdir izumin5210/ridgepole -c $(TESTING_DB_URL) --apply -f Schemafile -o Schemafile
