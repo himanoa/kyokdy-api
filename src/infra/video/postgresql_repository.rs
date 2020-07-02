@@ -32,6 +32,12 @@ pub struct PostgreSQLVideoRepository {
     client: Arc<Client>,
 }
 
+impl PostgreSQLVideoRepository {
+    pub fn new(client: Arc<Client>) -> Self {
+        PostgreSQLVideoRepository { client }
+    }
+}
+
 
 #[async_trait]
 impl VideoRepository for PostgreSQLVideoRepository {
@@ -53,11 +59,22 @@ impl VideoRepository for PostgreSQLVideoRepository {
     }
 
     async fn create(&self, video: DraftVideo) -> Result<()> {
-        unimplemented!()
-        // self.client.execute(r#"INSERT INTO videos(title, thumbnail_url, url)"#, [])
+        let changed_row = self.client.execute(r#"INSERT INTO videos(id, channel_id, title, thumbnail_url, url) VALUES ($1, $2, $3, $4, $5);"#, &[&video.id.0, &video.channel_id, &video.title, &video.thumbnail_url.0, &video.url.0]).await?;
+        match changed_row {
+            0 => Err(anyhow!("Failed Insert row.data: {:?}", video)),
+            _ => Ok(())
+        }
+
     }
 }
 
 #[cfg(test)]
 #[cfg_attr(not(feature = "integration_test"), cfg(ignore))]
-mod integration_test {}
+mod integration_test {
+    async fn teardown(client: Arc<Client>) {
+        client
+            .execute(r#"DELETE FROM "channels";"#, &[])
+            .await
+            .expect("Failed clean up channels table");
+    }
+}

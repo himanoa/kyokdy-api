@@ -16,4 +16,8 @@ pub trait IApplication {
     fn channel_repository(
         &self,
     ) -> Arc<dyn domain::channel::repository::ChannelRepository + Send + Sync>;
+
+    fn video_repository(
+        &self,
+    ) -> Arc<dyn domain::video::repository::VideoRepository + Send + Sync>;
 }
