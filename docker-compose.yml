@@ -33,3 +33,14 @@ services:
     depends_on:
       - db
       - testing_db
+  adminer-test:
+    image: donnex/pgweb
+    command: "-s --bind=0.0.0.0 --listen=8080 --url postgresql://root:root@testing_db/kyokdy_test?sslmode=disable"
+    links:
+      - db:db
+    restart: always
+    ports:
+      - 8081:8080
+    depends_on:
+      - db
+      - testing_db
