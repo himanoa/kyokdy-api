@@ -27,7 +27,7 @@ pub async fn create_channel_handler(
 
 pub async fn list_video_handler(
     application: Arc<dyn IApplication + Send + Sync>,
-    params: ListVideoParameter
+    params: ListVideoParameter,
 ) -> Result<impl Reply, Rejection> {
     let videos = application
         .video_service()
