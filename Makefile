@@ -31,10 +31,6 @@ db-migrate:
 unit-test:
 	cargo test
 
-.PHONY: unit-test
-unit-test:
-	cargo test
-
 .PHONY: integration-test
 integration-test:
 	cargo test --features integration_test

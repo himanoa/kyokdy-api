@@ -3,7 +3,10 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 #[async_trait]
-pub trait SongRepository {
+pub trait SongRepository
+where
+    Self: Sized + Clone + Send + Sync,
+{
     async fn search(
         &self,
         title: Option<&str>,
