@@ -1,6 +1,5 @@
 use crate::domain::channel::model::DraftChannel;
-use crate::domain::channel::repository::ChannelRepository;
-use crate::domain::video::repository::VideoRepository;
+use crate::domain::video::service::ListVideoParameter;
 use crate::exception::*;
 use crate::IApplication;
 use serde::{Deserialize, Serialize};
@@ -28,12 +27,11 @@ pub async fn create_channel_handler(
 
 pub async fn list_video_handler(
     application: Arc<dyn IApplication + Send + Sync>,
-    offset: u32,
-    limit: u32,
+    params: ListVideoParameter
 ) -> Result<impl Reply, Rejection> {
     let videos = application
-        .video_repository()
-        .list(limit, offset)
+        .video_service()
+        .list(params)
         .await
         .map_err(|e: anyhow::Error| reject::custom(WarpError(e)))?;
 

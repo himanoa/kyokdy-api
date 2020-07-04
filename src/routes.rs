@@ -1,7 +1,8 @@
 use crate::handlers::{create_channel_handler, list_video_handler};
 use crate::IApplication;
 use log::error;
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
+use crate::domain::video::service::ListVideoParameter;
 use std::sync::Arc;
 use warp::{
     filters::body::BodyDeserializeError, http::StatusCode, reject::InvalidQuery, reply, Filter,
@@ -11,12 +12,6 @@ use warp::{
 #[derive(Serialize)]
 struct ErrorMessage {
     description: String,
-}
-
-#[derive(Deserialize)]
-struct Pagination {
-    limit: u32,
-    offset: u32,
 }
 
 pub fn routes(
@@ -42,7 +37,7 @@ fn list_video(
     warp::path!("videos")
         .and(warp::get())
         .and(warp::query())
-        .and_then(move |p: Pagination| list_video_handler(application.clone(), p.limit, p.offset))
+        .and_then(move |p: ListVideoParameter| list_video_handler(application.clone(), p))
 }
 
 async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {

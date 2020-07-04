@@ -16,6 +16,11 @@ pub struct ListVideoParameter {
 }
 
 impl VideoService {
+    pub fn new(repository: Arc<dyn VideoRepository + Send + Sync>) -> Self {
+        VideoService {
+            video_repository: repository,
+        }
+    }
     pub async fn list(&self, params: ListVideoParameter) -> Result<Vec<Video>> {
         if let Some(channel_id) = params.channel_id {
             self.video_repository

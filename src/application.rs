@@ -20,6 +20,12 @@ impl IApplication for Application {
     ) -> Arc<dyn domain::video::repository::VideoRepository + Send + Sync> {
         Arc::new(PostgreSQLVideoRepository::new(self.client.clone()))
     }
+
+    fn video_service(&self) -> Arc<domain::video::service::VideoService> {
+        Arc::new(domain::video::service::VideoService::new(
+            self.video_repository(),
+        ))
+    }
 }
 
 impl Application {
