@@ -1,9 +1,7 @@
-use crate::domain::channel::model::DraftChannel;
 use crate::handlers::{create_channel_handler, list_video_handler};
 use crate::IApplication;
 use log::error;
 use serde::{Deserialize, Serialize};
-use std::convert::Infallible;
 use std::sync::Arc;
 use warp::{
     filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply, reject::InvalidQuery
