@@ -1,4 +1,5 @@
 use crate::domain::channel::model::DraftChannel;
+use crate::domain::song::model::SearchSongParams;
 use crate::domain::video::service::ListVideoParameter;
 use crate::exception::*;
 use crate::IApplication;
@@ -38,5 +39,26 @@ pub async fn list_video_handler(
     Ok(reply::with_status(
         reply::json(&videos),
         http::StatusCode::OK,
+    ))
+}
+
+pub async fn search_song_handler(
+    application: Arc<dyn IApplication + Send + Sync>,
+    params: SearchSongParams,
+) -> Result<impl Reply, Rejection> {
+    let songs = application
+        .song_repository()
+        .search(
+            params.title,
+            params.channel_name,
+            params.limit,
+            params.offset,
+        )
+        .await
+        .map_err(|e: anyhow::Error| reject::custom(WarpError(e)))?;
+
+    Ok(reply::with_status(
+        reply::json(&songs),
+        http::StatusCode::OK
     ))
 }

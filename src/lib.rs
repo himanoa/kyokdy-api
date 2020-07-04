@@ -20,5 +20,6 @@ pub trait IApplication {
     fn video_repository(&self)
         -> Arc<dyn domain::video::repository::VideoRepository + Send + Sync>;
 
+    fn song_repository(&self) -> Arc<dyn domain::song::repository::SongRepository + Send + Sync>;
     fn video_service(&self) -> Arc<domain::video::service::VideoService>;
 }

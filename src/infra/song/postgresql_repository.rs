@@ -21,8 +21,8 @@ impl TryFrom<&Row> for Song {
     }
 }
 
-fn generate_like_query(s: &str) -> String {
-    format!("%{}%", escape_like_query(s.to_string()))
+fn generate_like_query(s: String) -> String {
+    format!("%{}%", escape_like_query(s))
 }
 
 #[derive(Clone)]
@@ -30,14 +30,20 @@ pub struct PostgreSQLSongRepository {
     client: Arc<Client>,
 }
 
+impl PostgreSQLSongRepository {
+    pub fn new(client: Arc<Client>) -> Self {
+        PostgreSQLSongRepository { client }
+    }
+}
+
 #[async_trait]
 impl SongRepository for PostgreSQLSongRepository {
     async fn search(
         &self,
-        title: Option<&str>,
-        channel_name: Option<&str>,
-        limit: i32,
-        offset: i32,
+        title: Option<String>,
+        channel_name: Option<String>,
+        limit: i64,
+        offset: i64,
     ) -> Result<Vec<Song>> {
         let (title_query, channel_name_query) = (
             title.map(generate_like_query),

@@ -3,15 +3,12 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 #[async_trait]
-pub trait SongRepository
-where
-    Self: Sized + Clone + Send + Sync,
-{
+pub trait SongRepository {
     async fn search(
         &self,
-        title: Option<&str>,
-        channel_name: Option<&str>,
-        limit: i32,
-        offset: i32,
+        title: Option<String>,
+        channel_name: Option<String>,
+        limit: i64,
+        offset: i64,
     ) -> Result<Vec<Song>>;
 }

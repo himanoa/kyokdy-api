@@ -1,5 +1,6 @@
 use crate::domain::video::service::ListVideoParameter;
-use crate::handlers::{create_channel_handler, list_video_handler};
+use crate::domain::song::model::SearchSongParams;
+use crate::handlers::{create_channel_handler, list_video_handler, search_song_handler};
 use crate::IApplication;
 use log::error;
 use serde::Serialize;
@@ -19,6 +20,7 @@ pub fn routes(
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
     create_channel(application.clone())
         .or(list_video(application.clone()))
+        .or(search_song(application.clone()))
         .recover(|e| handle_error(e))
 }
 
@@ -39,6 +41,16 @@ fn list_video(
         .and(warp::query())
         .and_then(move |p: ListVideoParameter| list_video_handler(application.clone(), p))
 }
+
+fn search_song(
+    application: Arc<dyn IApplication + Send + Sync>,
+) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+    warp::path!("songs")
+        .and(warp::get())
+        .and(warp::query())
+        .and_then(move |p: SearchSongParams| search_song_handler(application.clone(), p))
+}
+
 
 async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
     let code;

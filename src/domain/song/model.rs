@@ -10,6 +10,14 @@ pub struct Song {
     pub end_timestamp: i32,
 }
 
+#[derive(Serialize, Deserialize, Eq, PartialEq)]
+pub struct SearchSongParams {
+    pub title: Option<String>,
+    pub channel_name: Option<String>,
+    pub offset: i64,
+    pub limit: i64,
+}
+
 impl Song {
     pub fn new(
         id: i64,
