@@ -1,7 +1,6 @@
 use super::model::DraftChannel;
 use super::repository::ChannelRepository;
 use anyhow::Result;
-use async_trait::async_trait;
 use std::sync::Arc;
 
 pub struct ChannelService {

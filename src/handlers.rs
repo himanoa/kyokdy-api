@@ -28,8 +28,8 @@ pub async fn create_channel_handler(
 
 pub async fn list_video_handler(
     application: Arc<dyn IApplication + Send + Sync>,
-    offset: i64,
-    limit: i64,
+    offset: u32,
+    limit: u32,
 ) -> Result<impl Reply, Rejection> {
     let videos = application
         .video_repository()

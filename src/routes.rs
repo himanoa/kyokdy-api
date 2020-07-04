@@ -4,7 +4,8 @@ use log::error;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use warp::{
-    filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply, reject::InvalidQuery
+    filters::body::BodyDeserializeError, http::StatusCode, reject::InvalidQuery, reply, Filter,
+    Rejection, Reply,
 };
 
 #[derive(Serialize)]
@@ -14,8 +15,8 @@ struct ErrorMessage {
 
 #[derive(Deserialize)]
 struct Pagination {
-    limit: i64,
-    offset: i64,
+    limit: u32,
+    offset: u32,
 }
 
 pub fn routes(
