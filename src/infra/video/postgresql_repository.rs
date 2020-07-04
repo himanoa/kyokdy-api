@@ -49,7 +49,7 @@ impl VideoRepository for PostgreSQLVideoRepository {
             .await?;
         Ok(result
             .iter()
-            .filter_map(|row| Video::try_from(row).ok())
+            .flat_map(|row| Video::try_from(row))
             .collect::<Vec<Video>>())
     }
     async fn listByChannel(&self, channel_id: i64, limit: i64, offset: i64) -> Result<Vec<Video>> {
@@ -62,7 +62,7 @@ impl VideoRepository for PostgreSQLVideoRepository {
             .await?;
         Ok(result
             .iter()
-            .filter_map(|row| Video::try_from(row).ok())
+            .flat_map(|row| Video::try_from(row))
             .collect::<Vec<Video>>())
     }
 
