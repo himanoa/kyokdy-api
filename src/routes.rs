@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::convert::Infallible;
 use std::sync::Arc;
 use warp::{
-    filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply,
+    filters::body::BodyDeserializeError, http::StatusCode, reply, Filter, Rejection, Reply, reject::InvalidQuery
 };
 
 #[derive(Serialize)]
@@ -54,6 +54,11 @@ async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
             description: "Not found endpoint".to_string(),
         }
     } else if let Some(error) = e.find::<BodyDeserializeError>() {
+        code = StatusCode::BAD_REQUEST;
+        ErrorMessage {
+            description: error.to_string(),
+        }
+    } else if let Some(error) = e.find::<InvalidQuery>() {
         code = StatusCode::BAD_REQUEST;
         ErrorMessage {
             description: error.to_string(),
