@@ -52,7 +52,7 @@ impl VideoRepository for PostgreSQLVideoRepository {
             .flat_map(|row| Video::try_from(row))
             .collect::<Vec<Video>>())
     }
-    async fn listByChannel(&self, channel_id: i64, limit: i64, offset: i64) -> Result<Vec<Video>> {
+    async fn list_by_channel(&self, channel_id: i64, limit: i64, offset: i64) -> Result<Vec<Video>> {
         let result = self
             .client
             .query(

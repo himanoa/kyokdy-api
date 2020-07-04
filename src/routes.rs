@@ -1,8 +1,8 @@
 use crate::domain::channel::model::DraftChannel;
-use crate::handlers::create_channel_handler;
+use crate::handlers::{create_channel_handler, list_video_handler};
 use crate::IApplication;
 use log::error;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use std::convert::Infallible;
 use std::sync::Arc;
 use warp::{
@@ -14,10 +14,18 @@ struct ErrorMessage {
     description: String,
 }
 
+#[derive(Deserialize)]
+struct Pagination {
+    limit: i64,
+    offset: i64
+}
+
 pub fn routes(
     application: Arc<dyn IApplication + Send + Sync>,
 ) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
-    create_channel(application).recover(|e| handle_error(e))
+    create_channel(application.clone())
+        .or(list_video(application.clone()))
+        .recover(|e| handle_error(e))
 }
 
 fn create_channel(
@@ -27,6 +35,15 @@ fn create_channel(
         .and(warp::post())
         .and(warp::body::json())
         .and_then(move |body| create_channel_handler(application.clone(), body))
+}
+
+fn list_video(
+    application: Arc<dyn IApplication + Send + Sync>,
+) -> impl Filter<Extract = impl Reply, Error = Rejection> + Clone {
+    warp::path!("videos")
+        .and(warp::get())
+        .and(warp::query())
+        .and_then(move |p: Pagination| list_video_handler(application.clone(), p.limit, p.offset))
 }
 
 async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
