@@ -1,6 +1,7 @@
 use crate::domain::song::model::Song;
 use crate::domain::song::repository::SongRepository;
 use crate::domain::video::model::VideoId;
+use crate::infra::postgresql_helper::escape_like_query;
 use anyhow::{Error, Result};
 use async_trait::async_trait;
 use std::convert::TryFrom;
@@ -21,7 +22,7 @@ impl TryFrom<&Row> for Song {
 }
 
 fn generate_like_query(s: &str) -> String {
-    format!("%{}%", s)
+    format!("%{}%", escape_like_query(s.to_string()))
 }
 
 #[derive(Clone)]
