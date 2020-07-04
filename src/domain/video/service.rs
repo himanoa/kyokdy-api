@@ -10,8 +10,8 @@ pub struct VideoService {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ListVideoParameter {
-    offset: u32,
-    limit: u32,
+    offset: i64,
+    limit: i64,
     channel_id: Option<String>,
 }
 
@@ -49,14 +49,14 @@ mod tests {
         struct DummyVideoRepository {}
         #[async_trait]
         impl VideoRepository for DummyVideoRepository {
-            async fn list(&self, limit: u32, offset: u32) -> Result<Vec<Video>> {
+            async fn list(&self, limit: i64, offset: i64) -> Result<Vec<Video>> {
                 Err(anyhow!("not call"))
             }
             async fn list_by_channel(
                 &self,
                 channel_id: String,
-                limit: u32,
-                offset: u32,
+                limit: i64,
+                offset: i64,
             ) -> Result<Vec<Video>> {
                 Ok(vec![Video::new(
                     "foo".to_string(),

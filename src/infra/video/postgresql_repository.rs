@@ -39,7 +39,7 @@ impl PostgreSQLVideoRepository {
 
 #[async_trait]
 impl VideoRepository for PostgreSQLVideoRepository {
-    async fn list(&self, limit: u32, offset: u32) -> Result<Vec<Video>> {
+    async fn list(&self, limit: i64, offset: i64) -> Result<Vec<Video>> {
         let result = self
             .client
             .query(
@@ -55,8 +55,8 @@ impl VideoRepository for PostgreSQLVideoRepository {
     async fn list_by_channel(
         &self,
         channel_id: String,
-        limit: u32,
-        offset: u32,
+        limit: i64,
+        offset: i64,
     ) -> Result<Vec<Video>> {
         let result = self
             .client
