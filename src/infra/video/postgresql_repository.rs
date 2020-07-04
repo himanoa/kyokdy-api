@@ -61,7 +61,7 @@ impl VideoRepository for PostgreSQLVideoRepository {
         let result = self
             .client
             .query(
-                r#"SELECT * FROM videos WHERE `channel_id` = $1 LIMIT $2 OFFSET $3;"#,
+                r#"SELECT * FROM videos WHERE channel_id = $1 LIMIT $2 OFFSET $3;"#,
                 &[&channel_id, &limit, &offset],
             )
             .await?;

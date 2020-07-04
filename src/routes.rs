@@ -1,7 +1,7 @@
 use crate::handlers::{create_channel_handler, list_video_handler};
 use crate::IApplication;
 use log::error;
-use serde::{Serialize};
+use serde::Serialize;
 use crate::domain::video::service::ListVideoParameter;
 use std::sync::Arc;
 use warp::{
