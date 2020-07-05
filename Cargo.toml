@@ -10,7 +10,6 @@ path = "src/bin/server.rs"
 [[bin]]
 name = "import-channels-batch"
 path = "src/bin/import_channels_batch.rs"
-
 [lib]
 path = "src/lib.rs"
 
@@ -32,6 +31,7 @@ anyhow = "1.0.26"
 thiserror = "1.0"
 async-trait = "0.1.35"
 structopt = "0.3"
+reqwest = { version = "0.10", features = ["json"] }
 
 [features]
 integration_test = []
