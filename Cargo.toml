@@ -7,6 +7,10 @@ edition = "2018"
 name = "server"
 path = "src/bin/server.rs"
 
+[[bin]]
+name = "import-channels-batch"
+path = "src/bin/import_channels_batch.rs"
+
 [lib]
 path = "src/lib.rs"
 
