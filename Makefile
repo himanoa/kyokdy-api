@@ -16,7 +16,7 @@ setup:
 
 .PHONY: run
 run:
-	RUST_LOG=debug cargo run
+	RUST_LOG=debug cargo run --bin server
 
 .PHONY: db-dry-run
 db-dry-run:

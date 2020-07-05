@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["himanoa <matsunoappy@gmail.com>"]
 edition = "2018"
 [[bin]]
-name = "kyokdy-api"
-path = "src/main.rs"
+name = "server"
+path = "src/bin/server.rs"
 
 [lib]
 path = "src/lib.rs"
