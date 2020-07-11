@@ -60,6 +60,10 @@ impl ChannelRepository for PostgreSQLChannelRepository {
             _ => Ok(()),
         }
     }
+
+    async fn bulk_register(&self, channels: Vec<DraftChannel>) -> Result<()> {
+        unimplemented!()
+    }
 }
 
 #[cfg(test)]
