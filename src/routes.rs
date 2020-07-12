@@ -1,5 +1,5 @@
-use crate::domain::video::service::ListVideoParameter;
 use crate::domain::song::model::SearchSongParams;
+use crate::domain::video::service::ListVideoParameter;
 use crate::handlers::{create_channel_handler, list_video_handler, search_song_handler};
 use crate::IApplication;
 use log::error;
@@ -50,7 +50,6 @@ fn search_song(
         .and(warp::query())
         .and_then(move |p: SearchSongParams| search_song_handler(application.clone(), p))
 }
-
 
 async fn handle_error(e: Rejection) -> Result<impl Reply, Rejection> {
     let code;

@@ -9,6 +9,7 @@ use warp::serve;
 use std::{collections::HashMap, env::vars, net::SocketAddr, process::exit, sync::Arc};
 
 use kyokdy_api::routes::routes;
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     pretty_env_logger::init();

@@ -59,6 +59,6 @@ pub async fn search_song_handler(
 
     Ok(reply::with_status(
         reply::json(&songs),
-        http::StatusCode::OK
+        http::StatusCode::OK,
     ))
 }

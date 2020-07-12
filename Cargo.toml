@@ -7,6 +7,9 @@ edition = "2018"
 name = "server"
 path = "src/bin/server.rs"
 
+[[bin]]
+name = "import-channels-batch"
+path = "src/bin/import_channels_batch.rs"
 [lib]
 path = "src/lib.rs"
 
@@ -14,7 +17,7 @@ path = "src/lib.rs"
 
 [dependencies]
 
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "0.2", features = ["full"] }
 warp = "0.2"
 tokio-postgres = "0.5.4"
 dotenv = "0.15.0"
@@ -27,6 +30,8 @@ url = "2.1.1"
 anyhow = "1.0.26"
 thiserror = "1.0"
 async-trait = "0.1.35"
+structopt = "0.3"
+reqwest = { version = "0.10", features = ["json"] }
 
 [features]
 integration_test = []

@@ -33,7 +33,7 @@ unit-test:
 
 .PHONY: integration-test
 integration-test:
-	cargo test --features integration_test
+	cargo test --features integration_test -- --test-threads=1
 
 .PHONY: fmt
 fmt:
