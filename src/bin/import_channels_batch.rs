@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use dotenv::dotenv;
 use log::{error, info};
+use anyhow::Result;
 use pretty_env_logger;
 use structopt::StructOpt;
 
@@ -16,7 +17,7 @@ struct Opt {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<()> {
     pretty_env_logger::try_init_timed()?;
     dotenv().ok();
 
@@ -25,7 +26,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let service = BulkRegisterService::new(Arc::new(VlueprintVTuberRepository {}));
     if opt.dry_run {
         info!("Start import channels batch(dry_run)");
-        service.dry_run().await?
+        service.dry_run().await
+    } else {
+        info!("Start import channels batch");
+        service.run().await
     }
-    Ok(())
 }
