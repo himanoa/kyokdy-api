@@ -18,12 +18,9 @@ impl TryFrom<&Row> for Channel {
     type Error = Error;
 
     fn try_from(value: &Row) -> Result<Self> {
-        let icon_url: String = value.try_get("icon_url")?;
-
         Ok(Channel {
             id: value.try_get("id")?,
             name: value.try_get("name")?,
-            icon_url: Url::try_from(icon_url)?,
         })
     }
 }
@@ -51,8 +48,8 @@ impl ChannelRepository for PostgreSQLChannelRepository {
         let result = self
             .client
             .execute(
-                r#"INSERT INTO channels(id, name, icon_url) VALUES ($1, $2, $3);"#,
-                &[&channel.id, &channel.name, &channel.icon_url.0],
+                r#"INSERT INTO channels(id, name) VALUES ($1, $2);"#,
+                &[&channel.id, &channel.name],
             )
             .await?;
         match result {
@@ -98,7 +95,6 @@ mod integration_test {
         let draft_channel = DraftChannel {
             id: "foo".to_string(),
             name: "bar".to_string(),
-            icon_url: Url::try_from("https://example.com").unwrap(),
         };
         repository
             .create(draft_channel)
