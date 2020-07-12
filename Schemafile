@@ -2,7 +2,6 @@
 
 create_table "channels", id: :string, force: :cascade do |t|
   t.string "name", null: false
-  t.text "icon_url", null: false
   t.index "id", unique: true
 end
 
