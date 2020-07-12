@@ -17,7 +17,7 @@ path = "src/lib.rs"
 
 [dependencies]
 
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "0.2", features = ["full"] }
 warp = "0.2"
 tokio-postgres = "0.5.4"
 dotenv = "0.15.0"

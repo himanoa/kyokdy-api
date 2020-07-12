@@ -8,3 +8,4 @@ pub trait ChannelRepository {
     async fn create(&self, channel: DraftChannel) -> Result<()>;
     async fn bulk_register(&self, channels: Vec<DraftChannel>) -> Result<()>;
 }
+

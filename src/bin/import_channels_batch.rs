@@ -1,13 +1,13 @@
 use dotenv::dotenv;
-use structopt::StructOpt;
 use log::{error, info};
 use pretty_env_logger;
+use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "import-channels-batch")]
 struct Opt {
     #[structopt(short, long)]
-    dry_run: bool
+    dry_run: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
