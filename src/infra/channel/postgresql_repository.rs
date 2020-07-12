@@ -60,7 +60,12 @@ impl ChannelRepository for PostgreSQLChannelRepository {
 
     async fn bulk_register(&self, channels: Vec<DraftChannel>) -> Result<()> {
         for c in channels {
-            self.client.execute(r#"INSERT INTO channels(id, name) VALUES ($1, $2);"#, &[&c.id, &c.name]).await;
+            self.client
+                .execute(
+                    r#"INSERT INTO channels(id, name) VALUES ($1, $2);"#,
+                    &[&c.id, &c.name],
+                )
+                .await;
         }
         Ok(())
     }
@@ -129,7 +134,13 @@ mod integration_test {
             name: "bar".to_string(),
         };
         repository
-            .bulk_register(vec![draft_channel, DraftChannel {  id: "poe".to_string(), name: "poepoe".to_string() }])
+            .bulk_register(vec![
+                draft_channel,
+                DraftChannel {
+                    id: "poe".to_string(),
+                    name: "poepoe".to_string(),
+                },
+            ])
             .await
             .expect("Failed create draft channel");
         let channel = repository
