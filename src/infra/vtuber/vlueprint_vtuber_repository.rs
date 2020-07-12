@@ -1,12 +1,13 @@
+use std::rc::Rc;
 use std::string::String;
 
-use async_trait::async_trait;
 use anyhow::anyhow;
+use async_trait::async_trait;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::domain::vtuber::repository::VTuberRepository;
 use crate::domain::channel::model::DraftChannel;
+use crate::domain::vtuber::repository::VTuberRepository;
 
 pub struct VlueprintVTuberRepository {}
 
@@ -41,7 +42,7 @@ struct InnerResult {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 struct Binding {
     channel_name: Option<Value>,
-    channel_id: Option<Value>
+    channel_id: Option<Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -54,22 +55,35 @@ impl VTuberRepository for VlueprintVTuberRepository {
     async fn list(&self) -> anyhow::Result<Vec<DraftChannel>> {
         let client = Client::new();
         let response = client
-            .get("https://vlueprint.org/query")
+            .get("https://vlueprint.org/sparql")
             .header("Accept", "application/json")
             .query(&Query { query })
             .send()
-            .await?
-            .json::<VlueprintResponse>()
             .await?;
 
-        Ok(response.results.bindings.iter().flat_map(|b| {
-            match (&b.channel_id, &b.channel_name) {
-                (Some(cid), Some(cna)) => Ok(DraftChannel { id: cid.value.clone(), name: cna.value.clone() }),
-                (Some(_), None) => Err(anyhow!(format!("VTuberRepository: channel name is not found, {:?}", b))),
-                (None, Some(_)) => Err(anyhow!(format!("VTuberRepository: channel id is not found, {:?}", b))),
-                _ => Err(anyhow!(format!("VTuberRepository: invalid response {:?}", b)))
-            }
-        })
-        .collect::<Vec<DraftChannel>>())
+        let json = response.json::<VlueprintResponse>().await?;
+        Ok(json
+            .results
+            .bindings
+            .iter()
+            .flat_map(|b| match (&b.channel_id, &b.channel_name) {
+                (Some(cid), Some(cna)) => Ok(DraftChannel {
+                    id: cid.value.clone(),
+                    name: cna.value.clone(),
+                }),
+                (Some(_), None) => Err(anyhow!(format!(
+                    "VTuberRepository: channel name is not found, {:?}",
+                    b
+                ))),
+                (None, Some(_)) => Err(anyhow!(format!(
+                    "VTuberRepository: channel id is not found, {:?}",
+                    b
+                ))),
+                _ => Err(anyhow!(format!(
+                    "VTuberRepository: invalid response {:?}",
+                    b
+                ))),
+            })
+            .collect::<Vec<DraftChannel>>())
     }
 }
