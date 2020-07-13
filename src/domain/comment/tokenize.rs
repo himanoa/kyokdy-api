@@ -1,7 +1,5 @@
 use super::token::{Token, TokenKind};
 use std::iter::Iterator;
-use std::str::Chars;
-use anyhow::Result;
 use std::iter::FromIterator;
 
 const TS_SEPERATOR: &str = "~～";
@@ -28,6 +26,7 @@ impl Tokenizer {
     }
 
     fn tokenize(&mut self, acc: &Vec<Token>) -> Option<Token> {
+        // 難しかったからゴリ押しで書いたらひどいことになったので誰か助けて><
         while *self.current()? == ' ' {
             self.next();
         }
@@ -90,9 +89,9 @@ impl Tokenizer {
 mod tests {
     use super::*;
 
-
     // とりあえずの最終目標は↓をきっちり分解できること
     // let PARSE_TARGET = "お歌配信乙のあ！\nどれもカッコよくて好きな曲じゃ✨\n千本桜を歌ってくれてありがとう‼️\n\n開始 2:05\nETERNAL BLAZE 4:51\nこのピアノでお前を8759632145回ぶん殴る 13:44\n吉原ラメント 21:11\n紅蓮華 28:15\nヨンジュウナナ 34:53\n千本桜 42:05\n↑リクエスト";
+
     #[test]
     fn test_tokenize_1() {
         assert_eq!(tokenize_from_string("開始 2:05\n".to_string()), vec![
