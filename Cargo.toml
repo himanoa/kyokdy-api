@@ -32,6 +32,7 @@ thiserror = "1.0"
 async-trait = "0.1.35"
 structopt = "0.3"
 reqwest = { version = "0.10", features = ["json"] }
+regex = "1"
 
 [features]
 integration_test = []
