@@ -1,7 +1,7 @@
 use crate::domain::url::Url;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Eq, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone)]
 pub struct VideoId(pub String);
 
 #[derive(Serialize, Deserialize, Eq, PartialEq)]

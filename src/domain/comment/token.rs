@@ -1,14 +1,13 @@
-
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum TokenKind {
     Timestamp,
     Character,
     End,
-    Separator
+    Separator,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Token {
     pub kind: TokenKind,
-    pub value: String
+    pub value: String,
 }
