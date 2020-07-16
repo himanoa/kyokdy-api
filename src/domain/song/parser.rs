@@ -23,20 +23,20 @@ use anyhow::{anyhow, Result};
 /// ```
 ///
 ///
-pub fn parse_timestamp(s: String) -> Result<i32> {
+pub fn parse_timestamp(s: String) -> Result<i64> {
     let timestamp = s.split(|c| c == ':').collect::<Vec<&str>>();
 
     match timestamp.len() {
         2 => {
-            let minites: i32 = timestamp.get(0).unwrap().to_string().parse()?;
-            let second: i32 = timestamp.get(1).unwrap().to_string().parse()?;
+            let minites: i64 = timestamp.get(0).unwrap().to_string().parse()?;
+            let second: i64 = timestamp.get(1).unwrap().to_string().parse()?;
 
             Ok(minites * 60 + second)
         }
         3 => {
-            let hour: i32 = timestamp.get(0).unwrap().to_string().parse()?;
-            let minutes: i32 = timestamp.get(1).unwrap().to_string().parse()?;
-            let second: i32 = timestamp.get(2).unwrap().to_string().parse()?;
+            let hour: i64 = timestamp.get(0).unwrap().to_string().parse()?;
+            let minutes: i64 = timestamp.get(1).unwrap().to_string().parse()?;
+            let second: i64 = timestamp.get(2).unwrap().to_string().parse()?;
 
             Ok(hour * 60 * 60 + minutes * 60 + second)
         }

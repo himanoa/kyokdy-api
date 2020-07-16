@@ -1,4 +1,4 @@
-use crate::domain::song::model::Song;
+use crate::domain::song::model::{Song, DraftSong};
 use crate::domain::song::repository::SongRepository;
 use crate::domain::video::model::VideoId;
 use crate::infra::postgresql_helper::escape_like_query;
@@ -84,4 +84,13 @@ impl SongRepository for PostgreSQLSongRepository {
             .flat_map(Song::try_from)
             .collect::<Vec<Song>>())
     }
+
+    async fn create(&self, draft_song: DraftSong) -> Result<()> {
+        self.client.execute(r#"INSERT INTO songs(video_id, title, start_timestamp, end_timestamp) VALUES ($1, $2, $3, $4)"#, &[&draft_song.video_id.0, &draft_song.title, &draft_song.start_timestamp, &draft_song.end_timestamp]).await?;
+        Ok(())
+    }
 }
+
+#[cfg(test)]
+#[cfg_attr(not(feature = "integration_test"), cfg(ignore))]
+mod integration_test {}

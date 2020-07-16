@@ -14,8 +14,8 @@ pub struct Song {
 pub struct DraftSong {
     pub video_id: VideoId,
     pub title: String,
-    pub start_timestamp: i32,
-    pub end_timestamp: Option<i32>,
+    pub start_timestamp: i64,
+    pub end_timestamp: Option<i64>,
 }
 
 #[derive(Serialize, Deserialize, Eq, PartialEq)]
