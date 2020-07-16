@@ -7,7 +7,15 @@ pub struct Song {
     pub video_id: VideoId,
     pub title: String,
     pub start_timestamp: i32,
-    pub end_timestamp: i32,
+    pub end_timestamp: Option<i32>,
+}
+
+#[derive(Serialize, Deserialize, Eq, PartialEq, Debug)]
+pub struct DraftSong {
+    pub video_id: VideoId,
+    pub title: String,
+    pub start_timestamp: i32,
+    pub end_timestamp: Option<i32>,
 }
 
 #[derive(Serialize, Deserialize, Eq, PartialEq)]
@@ -24,7 +32,7 @@ impl Song {
         video_id: VideoId,
         title: String,
         start_timestamp: i32,
-        end_timestamp: i32,
+        end_timestamp: Option<i32>,
     ) -> Self {
         Song {
             id,
