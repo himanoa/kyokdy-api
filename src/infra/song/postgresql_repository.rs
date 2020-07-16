@@ -90,3 +90,7 @@ impl SongRepository for PostgreSQLSongRepository {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[cfg_attr(not(feature = "integration_test"), cfg(ignore))]
+mod integration_test {}
