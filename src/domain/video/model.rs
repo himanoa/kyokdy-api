@@ -12,10 +12,10 @@ pub struct Video {
     pub url: Url,
 }
 
-#[derive(Serialize, Deserialize, Eq, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Clone)]
 pub struct DraftVideo {
     pub id: VideoId,
-    pub channel_id: i64,
+    pub channel_id: String,
     pub title: String,
     pub thumbnail_url: Url,
     pub url: Url,
