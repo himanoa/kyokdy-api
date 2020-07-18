@@ -11,5 +11,5 @@ pub trait VideoRepository {
         offset: i64,
     ) -> Result<Vec<Video>>;
     async fn list(&self, limit: i64, offset: i64) -> Result<Vec<Video>>;
-    async fn create(&self, video: DraftVideo) -> Result<()>;
+    async fn bulk_create(&self, videos: Vec<DraftVideo>) -> Result<()>;
 }

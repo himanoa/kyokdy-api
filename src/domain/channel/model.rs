@@ -6,7 +6,7 @@ pub struct Channel {
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Clone)]
 pub struct DraftChannel {
     pub id: String,
     pub name: String,

@@ -65,7 +65,7 @@ mod tests {
                     Url::try_from("https://example.com").unwrap(),
                 )])
             }
-            async fn create(&self, _video: DraftVideo) -> Result<()> {
+            async fn bulk_create(&self, _video: Vec<DraftVideo>) -> Result<()> {
                 Err(anyhow!("not call"))
             }
         }
